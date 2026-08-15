@@ -6,9 +6,9 @@
         AllowsTransparency="True"
         Background="Transparent"
         Topmost="True"
-        WindowState="Maximized"
         ResizeMode="NoResize"
-        ShowInTaskbar="False">
+        ShowInTaskbar="False"
+        Loaded="Window_Loaded">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Height" Value="34"/>

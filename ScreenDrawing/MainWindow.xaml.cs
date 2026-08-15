@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace ScreenDrawing
 {
@@ -46,6 +40,24 @@ namespace ScreenDrawing
             Ink.DefaultDrawingAttributes.Width = 6;
             Ink.DefaultDrawingAttributes.Height = 6;
             UseColor(Colors.Red);
+            Left = SystemParameters.VirtualScreenLeft;
+            Top = SystemParameters.VirtualScreenTop;
+            Width = SystemParameters.VirtualScreenWidth;
+            Height = SystemParameters.VirtualScreenHeight;
+        }
+
+        void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            double px = -SystemParameters.VirtualScreenLeft;
+            double py = -SystemParameters.VirtualScreenTop;
+            double pw = SystemParameters.PrimaryScreenWidth;
+            double ph = SystemParameters.PrimaryScreenHeight;
+            Toolbar.HorizontalAlignment = HorizontalAlignment.Left;
+            Toolbar.VerticalAlignment = VerticalAlignment.Top;
+            Toolbar.Margin = new Thickness(
+                px + (pw - Toolbar.ActualWidth) / 2,
+                py + ph - Toolbar.ActualHeight - 28,
+                0, 0);
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -153,4 +165,5 @@ namespace ScreenDrawing
             Close();
         }
     }
+
 }
