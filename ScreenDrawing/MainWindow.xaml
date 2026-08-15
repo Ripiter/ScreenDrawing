@@ -27,16 +27,22 @@
         <Border x:Name="Toolbar" VerticalAlignment="Bottom" HorizontalAlignment="Center"
                 Margin="0,0,0,28" Padding="8" Background="#F01E1E1E" CornerRadius="12">
             <StackPanel Orientation="Horizontal">
-                <Button Width="28" Height="28" MinWidth="0" Background="Black"   Tag="Black"   Click="Color_Click"/>
-                <Button Width="28" Height="28" MinWidth="0" Background="White"   Tag="White"   Click="Color_Click"/>
-                <Button Width="28" Height="28" MinWidth="0" Background="Red"     Tag="Red"     Click="Color_Click"/>
-                <Button Width="28" Height="28" MinWidth="0" Background="#2D7DFF" Tag="#2D7DFF" Click="Color_Click"/>
-                <Button Width="28" Height="28" MinWidth="0" Background="#22C55E" Tag="#22C55E" Click="Color_Click"/>
-                <Button Width="28" Height="28" MinWidth="0" Background="#EAB308" Tag="#EAB308" Click="Color_Click"/>
+                <Button x:Name="CurrentColorBtn" Width="30" Height="30" MinWidth="0" Click="Pick_Click"/>
+                <Border Width="1" Background="#555" Margin="6,4"/>
+                <Button x:Name="R0" Width="22" Height="22" MinWidth="0" Visibility="Collapsed" Click="Recent_Click"/>
+                <Button x:Name="R1" Width="22" Height="22" MinWidth="0" Visibility="Collapsed" Click="Recent_Click"/>
+                <Button x:Name="R2" Width="22" Height="22" MinWidth="0" Visibility="Collapsed" Click="Recent_Click"/>
+                <Button x:Name="R3" Width="22" Height="22" MinWidth="0" Visibility="Collapsed" Click="Recent_Click"/>
+                <Button x:Name="R4" Width="22" Height="22" MinWidth="0" Visibility="Collapsed" Click="Recent_Click"/>
                 <Border Width="1" Background="#555" Margin="6,4"/>
                 <Button Content="S" Tag="3"  Click="Size_Click"/>
                 <Button Content="M" Tag="6"  Click="Size_Click"/>
                 <Button Content="L" Tag="12" Click="Size_Click"/>
+                <TextBox x:Name="SizeBox" Width="52" Height="34" Margin="3"
+                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                         Background="#3A3A3A" Foreground="White" BorderThickness="0"
+                         FontSize="14" Text="6" TextChanged="SizeBox_TextChanged"/>
+                <TextBlock Text="px" Foreground="#AAA" VerticalAlignment="Center" Margin="1,0,6,0"/>
                 <Border Width="1" Background="#555" Margin="6,4"/>
                 <Button Content="Pen"   Click="Pen_Click"/>
                 <Button Content="Erase" Click="Erase_Click"/>

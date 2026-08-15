@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -36,14 +37,15 @@ namespace ScreenDrawing
 
         IntPtr hwnd;
         bool passthrough;
+        readonly List<Color> recents = new List<Color>();
 
         public MainWindow()
         {
             InitializeComponent();
-            Ink.DefaultDrawingAttributes.Color = Colors.Red;
+            Ink.DefaultDrawingAttributes.FitToCurve = true;
             Ink.DefaultDrawingAttributes.Width = 6;
             Ink.DefaultDrawingAttributes.Height = 6;
-            Ink.DefaultDrawingAttributes.FitToCurve = true;
+            UseColor(Colors.Red);
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -74,18 +76,71 @@ namespace ScreenDrawing
             Toolbar.Visibility = passthrough ? Visibility.Hidden : Visibility.Visible;
         }
 
-        void Color_Click(object sender, RoutedEventArgs e)
+        void UseColor(Color c)
         {
-            var c = (Color)ColorConverter.ConvertFromString((string)((Button)sender).Tag);
             Ink.DefaultDrawingAttributes.Color = c;
             Ink.EditingMode = InkCanvasEditingMode.Ink;
+            CurrentColorBtn.Background = new SolidColorBrush(c);
+            recents.RemoveAll(x => x == c);
+            recents.Insert(0, c);
+            if (recents.Count > 5) recents.RemoveAt(5);
+            RefreshRecents();
+        }
+
+        void RefreshRecents()
+        {
+            Button[] btns = { R0, R1, R2, R3, R4 };
+            for (int i = 0; i < btns.Length; i++)
+            {
+                if (i < recents.Count)
+                {
+                    btns[i].Background = new SolidColorBrush(recents[i]);
+                    btns[i].Tag = recents[i];
+                    btns[i].Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    btns[i].Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
+        void Pick_Click(object sender, RoutedEventArgs e)
+        {
+            var c = Ink.DefaultDrawingAttributes.Color;
+            var dlg = new System.Windows.Forms.ColorDialog
+            {
+                Color = System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B),
+                FullOpen = true
+            };
+            Topmost = false;
+            var result = dlg.ShowDialog();
+            Topmost = true;
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                var d = dlg.Color;
+                UseColor(Color.FromArgb(d.A, d.R, d.G, d.B));
+            }
+        }
+
+        void Recent_Click(object sender, RoutedEventArgs e)
+        {
+            UseColor((Color)((Button)sender).Tag);
         }
 
         void Size_Click(object sender, RoutedEventArgs e)
         {
-            double s = double.Parse((string)((Button)sender).Tag, CultureInfo.InvariantCulture);
-            Ink.DefaultDrawingAttributes.Width = s;
-            Ink.DefaultDrawingAttributes.Height = s;
+            SizeBox.Text = (string)((Button)sender).Tag;
+        }
+
+        void SizeBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (Ink == null) return;
+            if (double.TryParse(SizeBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double s) && s > 0)
+            {
+                Ink.DefaultDrawingAttributes.Width = s;
+                Ink.DefaultDrawingAttributes.Height = s;
+            }
         }
 
         void Pen_Click(object sender, RoutedEventArgs e) => Ink.EditingMode = InkCanvasEditingMode.Ink;
@@ -98,5 +153,4 @@ namespace ScreenDrawing
             Close();
         }
     }
-
 }
