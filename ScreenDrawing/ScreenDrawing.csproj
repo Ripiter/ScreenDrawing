@@ -7,6 +7,11 @@
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<UseWindowsForms>true</UseWindowsForms>
+		<ApplicationIcon>paintlogodrawn.ico</ApplicationIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="paintlogodrawn.ico" />
+	</ItemGroup>
 
 </Project>
